@@ -127,6 +127,6 @@ class MainTile extends StatelessWidget {
     );
   }
   void deleteBook(BuildContext context) async {
-      await FirebaseFirestore.instance.collection('recipe').doc(id).delete();
+      await FirebaseFirestore.instance.collection('main').doc(id).delete();
 }
 }

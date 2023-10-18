@@ -1,49 +1,50 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable
-import 'package:admin_app/addliterature.dart';
-import 'package:admin_app/editliteraturepage.dart';
-import 'package:admin_app/main.dart';
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors, non_constant_identifier_names, prefer_const_constructors, file_names
+
+import 'package:admin_app/addlibrary.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class EditHanducraftPage extends StatefulWidget {
-  String docId;
-  EditHanducraftPage(this.docId, {super.key});
+import 'addliterature.dart';
+import 'editcuisine.dart';
+
+class EditLibraryState extends StatefulWidget {
+  String docId='';
+   EditLibraryState({required this.docId});
 
   @override
-  State<EditHanducraftPage> createState() => _EditHanducraftPageState();
+  State<EditLibraryState> createState() => _EditLibraryStateState();
 }
 
-class _EditHanducraftPageState extends State<EditHanducraftPage> {
-  TextEditingController crafturlController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-  TextEditingController hidController = TextEditingController();
-  String networkImage = '';
+class _EditLibraryStateState extends State<EditLibraryState> {
+  TextEditingController NameController = TextEditingController();
+  TextEditingController AddressController = TextEditingController();
+  TextEditingController urlController = TextEditingController();
+  TextEditingController lidController = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
   @override
   void initState() {
     FirebaseFirestore.instance
-        .collection('handicraft')
+        .collection('addlibrary')
         .doc(widget.docId.toString())
         .get()
         .then((value) => {
               setState(() {
-                crafturlController.text = value['CraftURL'];
-                categoryController.text = value['Category'];
-                hidController.text = value['HID'];
-                networkImage = value['CraftImage'];
+                lidController.text = value['Library-Id'];
+                NameController.text = value['LibraryName'];
+                AddressController.text = value['LibraryAddress'];
+                urlController.text=value['LibraryLocation'];
               })
             });
 
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-        title: Text("Edit Craft"),
+        title: Text("Edit Library"),
         backgroundColor: Theme.of(context).primaryColor,
       ),
             body: Container(
@@ -66,22 +67,10 @@ class _EditHanducraftPageState extends State<EditHanducraftPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    EditInput(controller: hidController),
-                    Container(
-                      height: devW * 0.4,
-                      width: devW * 0.3,
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 5, offset: Offset(5, 5))
-                          ],
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black, width: 1),
-                          image: DecorationImage(
-                              image: NetworkImage(networkImage),
-                              fit: BoxFit.fill)),
-                    ),
-                    EditInput(controller: crafturlController),
+                    EditInput(controller: lidController),
+                    EditInput(controller: NameController),
+                    EditInput(controller: AddressController),
+                    EditInput(controller: urlController),
                     ElevatedButton(
                       style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
@@ -89,16 +78,18 @@ class _EditHanducraftPageState extends State<EditHanducraftPage> {
                         onPressed: () {
                           if (formGlobalKey.currentState!.validate()) {
                             FirebaseFirestore.instance
-                                .collection('handicraft')
+                                .collection('addlibrary')
                                 .doc(widget.docId)
                                 .update({
-                              'HID': hidController.text,
-                              'Category': categoryController.text,
-                              'CraftImage': networkImage,
-                              'CraftURL': crafturlController.text,
+                              'Library-Id': lidController.text,
+                              'LibraryName': NameController.text,
+                              'LibraryAddress': AddressController.text,
+                              'LibraryLocation': LocationController.text,
                             }).whenComplete(() {
-                              categoryController.clear();
-                              crafturlController.clear();
+                              lidController.clear();
+                              NameController.clear();
+                              AddressController.clear();
+                              LocationController.clear();
                               setState(() {
                                 showImage = false;
                               });
@@ -118,3 +109,4 @@ class _EditHanducraftPageState extends State<EditHanducraftPage> {
             )));
   }
 }
+

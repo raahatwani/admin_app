@@ -1,36 +1,26 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors, use_key_in_widget_constructors, unused_import, sized_box_for_whitespace, unused_local_variable, file_names, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, sized_box_for_whitespace
 
 import 'dart:io';
+
 import 'package:admin_app/addliterature.dart';
-import 'package:admin_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import '../main.dart';
 
-String mainimageURL = '';
-TextEditingController categorydesccontroller = TextEditingController();
+import 'constants.dart';
+String GalleryimageURL = '';
 
-class MainFormData extends StatefulWidget {
-  const MainFormData({super.key});
 
+class AddGallery extends StatefulWidget {
   @override
-  State<MainFormData> createState() => _MainFormDataState();
+  State<AddGallery> createState() => _AddGalleryState();
 }
 
-class _MainFormDataState extends State<MainFormData> {
-  List<String> category = [
-    'Literature',
-    'Cuisine',
-    'Handicraft',
-    'Destination',
-    'Culture'
-  ];
-  String selcategory = 'Literature';
-  pickimage() async {
+class _AddGalleryState extends State<AddGallery> {
+
+    pickimage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
     if (pickedFile != null) {
@@ -41,18 +31,16 @@ class _MainFormDataState extends State<MainFormData> {
       Reference refDirImages = referenceRoot.child('images');
       Reference referenceImageToUpload = refDirImages.child(uniqueFileName);
       final uploadTask = await referenceImageToUpload.putFile(imageFile!);
-      mainimageURL = await referenceImageToUpload.getDownloadURL();
+      GalleryimageURL = await referenceImageToUpload.getDownloadURL();
     }
   }
-
   final formGlobalKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        title: Text("Add Details to Main Page"),
+           appBar: AppBar(
+        title: Text("Add Images"),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Container(
@@ -69,7 +57,8 @@ class _MainFormDataState extends State<MainFormData> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Form(
+            child: 
+            Form(
               key: formGlobalKey,
               child: Center(
                 child: Padding(
@@ -77,33 +66,6 @@ class _MainFormDataState extends State<MainFormData> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.all(28.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Select Category'),
-                            DropdownButton(
-                              focusColor: Colors.blue,
-                              items: category.map((String category) {
-                                return DropdownMenuItem(
-                                  value: category,
-                                  child: Text(
-                                    category,
-                                    style: kNormalTextBold,
-                                  ),
-                                );
-                              }).toList(),
-                              value: selcategory,
-                              onChanged: (String? newvalue) {
-                                setState(() {
-                                  selcategory = newvalue!;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -126,36 +88,32 @@ class _MainFormDataState extends State<MainFormData> {
                               width: 200,
                               child: Image.file(imageFile!),
                             ),
-                      TextInput(
-                          hintText: 'Category Description',
-                          controller: categorydesccontroller),
                       ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                  Theme.of(context).primaryColor)),
+                        style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    Theme.of(context).primaryColor)),
+                            
                           onPressed: () {
                             if (formGlobalKey.currentState!.validate()) {
-                              String Categoryid = DateTime.now()
+                              String ImageId = DateTime.now()
                                   .microsecondsSinceEpoch
                                   .toString();
                               FirebaseFirestore.instance
-                                  .collection('main')
-                                  .doc(Categoryid)
+                                  .collection('gallery')
+                                  .doc(ImageId)
                                   .set({
-                                'CID': Categoryid,
-                                'CategoryName': selcategory,
-                                'CategoryImage': mainimageURL,
-                                'CategoryDescription':
-                                    categorydesccontroller.text,
+                                'Image-Id': ImageId,
+                                'ImageURL': GalleryimageURL,                            
+                                
                               }).whenComplete(() => {
-                                        categorydesccontroller.clear(),
+                                       
                                         setState(() {
-                                          showImage = false;
+                                          showImage=false;
                                         }),
                                         Alert(
                                                 context: context,
                                                 title:
-                                                    'Category Added Successfully')
+                                                    'Image Added Successfully')
                                             .show()
                                       });
                             }

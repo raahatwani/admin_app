@@ -8,7 +8,7 @@ import 'package:form_validator/form_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constants.dart';
-import 'bookform.dart';
+import 'addliterature.dart';
 
 class HandicraftFormData extends StatefulWidget {
   HandicraftFormData({super.key});
@@ -125,7 +125,7 @@ class _HandicraftFormDataState extends State<HandicraftFormData> {
                           validator: ValidationBuilder().url().build(),
                           controller: urlController,
                           decoration: InputDecoration(
-                              hintText: 'Enter book url',
+                              hintText: 'Enter url',
                               hintStyle: TextStyle(fontSize: 20),
                               enabledBorder: kBorder,
                               focusedBorder: kBorder)),

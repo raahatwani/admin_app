@@ -23,16 +23,7 @@ class _LoginState extends State<Login> {
     devW = MediaQuery.of(context).size.width;
     return SafeArea(
         child: Scaffold(
-      body: Container(decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.white,
-                Theme.of(context).scaffoldBackgroundColor,
-              ],
-            ),
-          ),
+      body: Container(color: Colors.white,height: devH,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(

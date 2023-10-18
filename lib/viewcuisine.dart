@@ -46,6 +46,7 @@ class _ViewCuisinePageState extends State<ViewCuisinePage> {
                       document.data()! as Map<String, dynamic>;
                   return MyListTile(
                     rid: data['RID'],
+                    rcategory: data['Category'],
                     rdesc: data['RecipeDescription'],
                     rimage: data['RecipeImage'],
                     rname: data['RecipeName'],
@@ -65,6 +66,7 @@ class _ViewCuisinePageState extends State<ViewCuisinePage> {
 
 class MyListTile extends StatelessWidget {
   final String rid;
+  final String rcategory;
   final String rdesc;
   final String rimage;
   final String rname;
@@ -73,6 +75,7 @@ class MyListTile extends StatelessWidget {
 
   MyListTile(
       {required this.rid,
+      required this.rcategory,
       required this.rdesc,
       required this.rimage,
       required this.rname,
@@ -118,6 +121,7 @@ class MyListTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("RId:$rid"),
+              Text("Category:$rcategory"),
               Text("RecipeName:$rname"),
               Text("Description:$rdesc"),
               Text("Ingredients:"),

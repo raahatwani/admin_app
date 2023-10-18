@@ -1,24 +1,22 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names, must_be_immutable, file_names
 
-
-import 'package:admin_app/edithandicraft.dart';
+import 'package:admin_app/editLibrary.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../main.dart';
 
-class ViewHandicraftPage extends StatefulWidget {
-  const ViewHandicraftPage({super.key});
+class ViewLibrary extends StatefulWidget {
+  const ViewLibrary({super.key});
 
   @override
-  State<ViewHandicraftPage> createState() => _ViewHandicraftPageState();
+  State<ViewLibrary> createState() => _ViewLibraryState();
 }
 
-class _ViewHandicraftPageState extends State<ViewHandicraftPage> {
+class _ViewLibraryState extends State<ViewLibrary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Handicraft"),
+        title: Text("Library"),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Container(decoration: BoxDecoration(
@@ -32,7 +30,7 @@ class _ViewHandicraftPageState extends State<ViewHandicraftPage> {
             ),
           ),
         child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('handicraft').snapshots(),
+            stream: FirebaseFirestore.instance.collection('addlibrary').snapshots(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
                 return Text('Something went wrong');
@@ -45,11 +43,11 @@ class _ViewHandicraftPageState extends State<ViewHandicraftPage> {
                 children: snapshot.data!.docs.map((DocumentSnapshot document) {
                   Map<String, dynamic> data =
                       document.data()! as Map<String, dynamic>;
-                  return Handicraft(
-                    id: data['HID'].toString(),
-                    category: data['Category'].toString(),
-                    url: data['CraftURL'].toString(),
-                    imagePath: data['CraftImage'].toString(),
+                  return Library(
+                    id: data['Library-Id'].toString(),
+                    Name: data['LibraryName'].toString(),
+                    Address: data['LibraryAddress'].toString(),
+                    Location: data['LibraryLocation'].toString(),
                   );
                 }).toList(),
               );
@@ -59,16 +57,16 @@ class _ViewHandicraftPageState extends State<ViewHandicraftPage> {
   }
 }
 
-class Handicraft extends StatelessWidget {
-  final String category;
-  final String url;
-  final String imagePath;
+class Library extends StatelessWidget {
+  final String Name;
+  final String Location;
+  final String Address;
   String id = '';
 
-  Handicraft(
-      {required this.category,
-      required this.url,
-      required this.imagePath,
+  Library(
+      {required this.Name,
+      required this.Location,
+      required this.Address,
       required this.id});
 
   @override
@@ -78,19 +76,20 @@ class Handicraft extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.circular(12.0),
+              BorderRadius.circular(12.0), // Adjust the radius as needed
         ),
         elevation: 4,
         child: ListTile(
           title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Handicraft'),
+              Text('Library'),
+            
               IconButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => EditHanducraftPage(id)));
+                            builder: (_) => EditLibraryState(docId: id,)));
                   },
                   icon: Icon(Icons.edit)),
                   IconButton(
@@ -104,23 +103,12 @@ class Handicraft extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("HID:$id"),
-              Container(
-                height: devW * 0.4,
-                width: devW * 0.3,
-                margin: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(blurRadius: 5, offset: Offset(5, 5))
-                    ],
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: Colors.black, width: 1),
-                    image: DecorationImage(
-                        image: NetworkImage(imagePath), fit: BoxFit.fill)),
-              ),
-              Text("CategoryName: $category"),
+
+              Text("Library-Id:$id"),
+             Text("LibraryName:$Name"),
+              Text("LibraryAddress: $Address"),
               Text(
-                "CraftURL: $url",
+                "LibraryLocation: $Location",
                 textAlign: TextAlign.justify,
               ),
             ],
@@ -130,6 +118,6 @@ class Handicraft extends StatelessWidget {
     );
   }
   void deleteBook(BuildContext context) async {
-      await FirebaseFirestore.instance.collection('handicraft').doc(id).delete();
+      await FirebaseFirestore.instance.collection('addlibrary').doc(id).delete();
   }
 }

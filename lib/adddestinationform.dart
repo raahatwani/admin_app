@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:admin_app/bookform.dart';
+import 'package:admin_app/addliterature.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -151,6 +151,9 @@ class _DestinationFormDataState extends State<DestinationFormData> {
                               }).whenComplete(() => {
                                         destnamecontroller.clear(),
                                         destdesccontroller.clear(),
+                                        setState(() {
+                                          showImage=false;
+                                        }),
                                         Alert(
                                                 context: context,
                                                 title:
