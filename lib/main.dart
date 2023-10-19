@@ -15,6 +15,7 @@ import 'package:admin_app/viewLibrary.dart';
 import 'package:admin_app/viewcuisine.dart';
 import 'package:admin_app/viewculture.dart';
 import 'package:admin_app/viewdestination.dart';
+import 'package:admin_app/viewfeedback.dart';
 import 'package:admin_app/viewgallery.dart';
 import 'package:admin_app/viewhandicrafts.dart';
 import 'package:admin_app/viewliterature.dart';
@@ -85,6 +86,7 @@ class _MainPageState extends State<MainPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              
               Padding(
                 padding: EdgeInsets.all(devH * 0.03),
                 child: CircleAvatar(
@@ -92,6 +94,10 @@ class _MainPageState extends State<MainPage> {
                     maxRadius: devH * 0.1),
               ),
               Padding(padding: EdgeInsets.all(8.0),child: Text('Welcome Back Admin!',style: kSubHeading,)),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FeedbackButton(FeedBack(), 'User FeedBack',  Icons.remove_red_eye),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -216,7 +222,35 @@ class _MainPageState extends State<MainPage> {
                 text,
                 style: kNormalText,
               ),
-              Icon(icon)
+              Icon(icon,color: myTheme.scaffoldBackgroundColor,weight: 2,)
+            ],
+          )),
+    );
+
+    
+  }
+
+  Widget FeedbackButton(var nextPage, String text, IconData icon){
+    return Container(
+      height: devH * 0.1,
+      width: devW * 0.8,
+      child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStatePropertyAll(Theme.of(context).primaryColor)),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => nextPage));
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                text,
+                style: kSubHeading,
+              ),
+              Icon(icon,color: myTheme.scaffoldBackgroundColor,weight: 2,)
             ],
           )),
     );
